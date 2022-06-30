@@ -3,8 +3,7 @@
 */
 package main
 
-import ("fmt"
-        "sort")
+import ("fmt")
 
 func binary_search(data []int, num int) (int) {
   low := 0
@@ -58,11 +57,24 @@ func pop(data []int, index int) {
   data = append(data[:index], data[index+1:]...)
 }
 
-func qsort(data []int) {
+func qsort(data []int) ([]int) {
+  if len(data) < 2 {
+    return data
+  } else {
+    support := data[0]
+    less := []int{}
+    more := []int{}
 
+    for _, i := range(data[1:]) {
+      if i <= support { less = append(less, i) }
+      if i > support { more = append(more, i) }
+    }
+
+    return append(append(qsort(less), support), qsort(more)...)
+  }
 }
 
 func main() {
   s := []int{4, 2, 3, 1, 7, 9, 12, 16, 15}
-  fmt.Println(s)
+  fmt.Println(qsort(s))
 }
