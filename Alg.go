@@ -74,7 +74,22 @@ func qsort(data []int) ([]int) {
   }
 }
 
+func bfs(dict map[string][]string) {
+  // nothing
+}
+
 func main() {
   s := []int{4, 2, 3, 1, 7, 9, 12, 16, 15}
+  graph :=  map[string][]string {}
+  graph["you"] = []string {"alice", "ЬоЬ", "claire"}
+  graph["bob"] = []string {"anuj", "peggy"}
+  graph["alice"] = []string {"peggy"}
+  graph["claire"] = []string {"thom", "jonny"}
+  graph["anuj"] = []string {}
+  graph["peggy"] = []string {}
+  graph["thom"] = []string {}
+  graph["jonny"] = []string {}
+
+
   fmt.Println(qsort(s))
 }
