@@ -5,6 +5,18 @@ package main
 
 import ("fmt")
 
+type deque struct {
+  data []string
+}
+
+func (d *deque) write (elim string)  { d.data = append(d.data, elim) }
+
+func (d *deque) read () (string) {
+  tmp := d.data[0]
+  d.data = d.data[1:]
+  return tmp
+}
+
 func binary_search(data []int, num int) (int) {
   low := 0
   high := len(data)-1
@@ -74,14 +86,28 @@ func qsort(data []int) ([]int) {
   }
 }
 
-func bfs(dict map[string][]string) {
-  // nothing
+func bfs(dict map[string][]string, start, stop string) (bool) {
+  d := deque{}
+  // neighbors record
+  for _, i := range(dict[start]) { d.write(i) }
+
+  // run 2 deque
+  for len(d.data) != 0 {
+    current := d.read()
+    if current != stop {
+      for _, i := range(dict[current]) { d.write(i) }
+    } else {
+      return true
+    }
+  }
+
+  return false
 }
 
 func main() {
-  s := []int{4, 2, 3, 1, 7, 9, 12, 16, 15}
+  //s := []int{4, 2, 3, 1, 7, 9, 12, 16, 15}
   graph :=  map[string][]string {}
-  graph["you"] = []string {"alice", "ЬоЬ", "claire"}
+  graph["you"] = []string {"alice", "bob", "claire"}
   graph["bob"] = []string {"anuj", "peggy"}
   graph["alice"] = []string {"peggy"}
   graph["claire"] = []string {"thom", "jonny"}
@@ -90,6 +116,5 @@ func main() {
   graph["thom"] = []string {}
   graph["jonny"] = []string {}
 
-
-  fmt.Println(qsort(s))
+  fmt.Println(bfs(graph, "you", "thomy"))
 }
