@@ -3,7 +3,8 @@
 */
 package main
 
-import ("fmt")
+import ("fmt"
+)
 
 type deque struct {
   data []string
@@ -104,9 +105,47 @@ func bfs(dict map[string][]string, start, stop string) (bool) {
   return false
 }
 
+func contains(s []string, str string) bool {
+	for _, v := range s {
+		if v == str {
+			return true
+		}
+	}
+	return false
+}
+
+func dijkstr(child map[string]map[string]int, start, stop string) {
+  costs_v := map[string]int {start: 0}
+
+  check := []string {}
+  d := deque{}
+  d.write(start)
+  for len(d.data) != 0 {
+    now := d.read()
+    check = append(check, now)
+    // add 2 deque
+    for i := range(child[now]) {
+      if !contains(d.data, i) && !contains(check, i) { d.write(i) }
+    }
+
+    // main code
+    for point := range(child[now]) {
+      _, flag := costs_v[point]
+      if flag {
+        if costs_v[point] > child[now][point] + costs_v[now] {
+          costs_v[point] = child[now][point] + costs_v[now]
+        }
+      } else {
+        costs_v[point] = child[now][point] + costs_v[now]
+      }
+    }
+  }
+  fmt.Println(costs_v)
+}
+
 func main() {
   //s := []int{4, 2, 3, 1, 7, 9, 12, 16, 15}
-  graph :=  map[string][]string {}
+  /*graph :=  map[string][]string {}
   graph["you"] = []string {"alice", "bob", "claire"}
   graph["bob"] = []string {"anuj", "peggy"}
   graph["alice"] = []string {"peggy"}
@@ -114,7 +153,15 @@ func main() {
   graph["anuj"] = []string {}
   graph["peggy"] = []string {}
   graph["thom"] = []string {}
-  graph["jonny"] = []string {}
+  graph["jonny"] = []string {}*/
 
-  fmt.Println(bfs(graph, "you", "thomy"))
+  graph := map[string]map[string]int {}
+  graph["A"] = map[string]int {"B": 3, "C": 10, "D": 1}
+  graph["B"] = map[string]int {"A": 3, "F": 6}
+  graph["C"] = map[string]int {"A": 10, "D": 2}
+  graph["D"] = map[string]int {"A": 1, "C": 2, "E": 5, "F": 4}
+  graph["E"] = map[string]int {"D": 5, "F": 2}
+  graph["F"] = map[string]int {"B": 6, "D": 4, "E": 2}
+
+  dijkstr(graph, "A", "E")
 }
